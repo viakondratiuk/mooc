@@ -1,0 +1,66 @@
+* int_conv.py
+	convert to:
+		sign magnitude
+		one complement
+		two complement
+	settings:
+		number of bits
+	asserts:
+		type is int
+	helpers:
+		define number sign
+
+
+* calls for convertion
+    dec2bin(number in (int, float), type in ('sm', '1c', '2c', 'fp', 'fl'));
+    bin2dec(number in (str)       , type in ('sm', '1c', '2c', 'fp', 'fl'));
+    
+* internal calls
+    dec2bin(-27, 'sm')
+        * Some setting for add 0 into the lenght
+        * Select a function with which we are going to work
+        * Somehow get sign of a number
+        * Convert this number
+        
+
+def convert(d, n, t):
+
+    if d == 'dec2bin':
+        b = to_binary(n, t)
+
+    def to_binary(n, t):        
+        if type(n) == int:
+            b = convert_decimal_part(n)
+            if n > 0:
+                return b
+                
+            if type == 'sm':
+                return sign_magnitude(n)
+            elif type == '1c':
+                return one_complemet(n)
+            elif type == '2c':
+                return two_complemet(n)            
+        elif type(n) == float:
+            l = str(n).split('.')
+            s = get_sign(n)
+            d = convert_decimal_part(l[0])
+            f = convert_fractional_part(l[1])
+            if t == 'fp':
+                return s + limit d + limit f
+            if t == 'fl':
+                return convert_to_float(s, d, f)        
+
+
+convert('dec2bin', -28, '2c')
+convert('bin2dec', '111000', 'sm')
+
+About settings:
+    * Sign Magnitude, 1s complement, 2s complement
+        - Number of digits in int presentation
+    * Fixed, Float
+        - 1 - sign bit, 3 - exponent, 4 - significand
+        - Number of digits in significand
+        - Number of digits in exponent
+        
+If everything is lists then how to show them:
+    ''.join(map(str, [0, 1, 1, 0, 0]))
