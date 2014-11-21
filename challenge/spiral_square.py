@@ -14,5 +14,9 @@ print spiral_square(4)
 def spiral_square(size):
     res = [size*[0] for i in range(size)]
     row = column = 0
+    curSize = size
+    count = 0
     for i in range(1, size*size):
         res[row][column] = i
+        if i <= curSize:
+            row += 1
