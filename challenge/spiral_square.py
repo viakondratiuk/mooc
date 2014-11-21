@@ -12,4 +12,7 @@ print spiral_square(4)
 '''
 
 def spiral_square(size):
-    res = []
+    res = [size*[0] for i in range(size)]
+    row = column = 0
+    for i in range(1, size*size):
+        res[row][column] = i
