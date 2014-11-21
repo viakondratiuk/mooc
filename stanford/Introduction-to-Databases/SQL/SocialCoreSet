@@ -1,0 +1,48 @@
+1. Find the names of all students who are friends with someone named Gabriel.
+
+SELECT H1.name
+FROM Highschooler AS H
+JOIN Friend AS F ON H.ID = F.ID1
+JOIN Highschooler AS H1 ON F.ID2 = H1.ID
+WHERE H.name = 'Gabriel'
+----------------------------------------
+2. For every student who likes someone 2 or more grades younger than themselves, return that student's name and grade, and the name and grade of the student they like.
+
+SELECT H.name, H.grade, H1.name, H1.grade
+FROM Highschooler AS H
+JOIN Likes AS L ON H.ID = L.ID1
+JOIN Highschooler AS H1 ON L.ID2 = H1.ID
+WHERE (H.grade - H1.grade) >= 2
+----------------------------------------
+3. For every pair of students who both like each other, return the name and grade of both students. Include each pair only once, with the two names in alphabetical order.
+
+SELECT H1.name, H1.grade, H2.name, H2.grade
+FROM Highschooler AS H1, Highschooler AS H2, Likes AS L1, Likes AS L2
+WHERE H1.ID = L1.ID1 AND H2.ID = L1.ID2 AND L1.ID1 = L2.ID2 AND L1.ID2 = L2.ID1 AND H1.name < H2.name
+----------------------------------------
+4. Find names and grades of students who only have friends in the same grade. Return the result sorted by grade, then by name within each grade.
+
+SELECT name, grade
+  FROM Highschooler
+  WHERE ID NOT IN (
+    SELECT H1.ID
+    FROM Highschooler AS H1, Highschooler AS H2, Friend AS F1
+    WHERE H1.ID = F1.ID1 AND H2.ID = F1.ID2 AND H1.grade != H2.grade    
+  )
+  ORDER BY grade, name
+----------------------------------------
+5. Find the name and grade of all students who are liked by more than one other student.
+
+SELECT name, grade
+  FROM Highschooler
+  WHERE ID IN (
+    SELECT ID2
+    FROM Likes
+    GROUP BY ID2
+    HAVING COUNT(ID2) > 1    
+  )
+----------------------------------------
+----------------------------------------
+----------------------------------------
+----------------------------------------
+----------------------------------------

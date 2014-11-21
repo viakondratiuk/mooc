@@ -1,0 +1,33 @@
+1. It's time for the seniors to graduate. Remove all 12th graders from Highschooler.
+
+DELETE FROM Highschooler
+WHERE grade = 12
+----------------------------------------
+2. If two students A and B are friends, and A likes B but not vice-versa, remove the Likes tuple.
+
+DELETE FROM Likes
+  WHERE ID1 IN (
+SELECT L.ID1
+  FROM Likes AS L, Friend AS F
+  WHERE L.ID1 NOT IN (
+    SELECT L1.ID1
+    FROM Likes AS L1, Likes AS L2
+    WHERE L1.ID1 = L2.ID2 AND L2.ID1 = L1.ID2    
+  ) AND L.ID1 = F.ID1 AND L.ID2 = F.ID2
+)
+----------------------------------------
+3. For all cases where A is friends with B, and B is friends with C, add a new friendship for the pair A and C. Do not add duplicate friendships, friendships that already exist, or friendships with oneself. (This one is a bit challenging; congratulations if you get it right.) 
+
+INSERT INTO Friend
+SELECT DISTINCT F1.ID1, F2.ID2
+  FROM Friend AS F1, Friend AS F2, Friend AS F3
+  WHERE F1.ID2 = F2.ID1 AND F1.ID1 != F2.ID2  
+  AND F1.ID1 NOT IN (
+    SELECT F3.ID1 
+      FROM Friend AS F3 
+      WHERE F3.ID2 = F2.ID2  
+  );
+----------------------------------------
+----------------------------------------
+----------------------------------------
+----------------------------------------

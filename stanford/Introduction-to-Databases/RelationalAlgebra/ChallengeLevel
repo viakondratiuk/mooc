@@ -1,0 +1,55 @@
+1. Find all pizzas that are eaten only by people younger than 24, or that cost less than $10 everywhere they're served.
+
+(\project_{pizza} Eats
+\diff
+\project_{pizza} (\select_{age>=24} Person \join Eats))
+\union
+(\project_{pizza} Serves 
+\diff 
+\project_{pizza} (\select_{price>=10} Serves)) 
+----------------------------------------
+2. Find the age of the oldest person (or people) who eat mushroom pizza. 
+(This query is quite challenging; congratulations if you get it right.) 
+
+\project_{age} (\project_{name} \select_{pizza = "mushroom"} Eats \join Person)
+\diff
+\project_{age1} \select_{age1 < age2} (
+    \rename_{age1} \project_{age} (\project_{name} \select_{pizza = "mushroom"} Eats \join Person)
+    \cross
+    \rename_{age2} \project_{age} (\project_{name} \select_{pizza = "mushroom"} Eats \join Person)
+)
+----------------------------------------
+3. Find all pizzerias that serve only pizzas eaten by people over 30. 
+(This query is quite challenging; congratulations if you get it right.) 
+
+\project_{pizzeria} (\select_{age > 30} Person \join Eats \join Serves)
+\diff
+\project_{pizzeria} (
+    \project_{pizzeria, pizza} Serves
+    \diff
+    \project_{pizzeria, pizza} (\select_{age > 30} Person \join Eats \join Serves)
+)    
+----------------------------------------
+4. Find all pizzerias that serve every pizza eaten by people over 30. 
+(This query is very challenging; extra congratulations if you get it right.) 
+
+\project_{pizzeria} (
+    \project_{pizzeria, pizza} (\select_{age>30} (Person \join Eats \join Serves))
+)
+\diff
+\project_{pizzeria} ( 
+    \project_{pizzeria} (
+        \project_{pizzeria, pizza}(\select_{age>30} (Person \join Eats \join Serves))
+     )   
+     \cross 
+     \project_{pizza} (\select_{age>30} (Person \join Eats \join Serves))     
+    \diff 
+    \project_{pizzeria, pizza} (\select_{age>30} (Person \join Eats \join Serves)) 
+) 
+
+----------------------------------------
+----------------------------------------
+----------------------------------------
+----------------------------------------
+----------------------------------------
+----------------------------------------
