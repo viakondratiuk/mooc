@@ -31,14 +31,47 @@ row = 2, column = 2
 
 row = 2, column = 1
 (2, 1)
+Read:
+    http://codegolf.stackexchange.com/questions/769/print-nxn-spiral-of-ascending-numbers
+    http://rosettacode.org/wiki/Spiral_matrix#Python
 '''
 
 def spiral_square(size):
     res = [size*[0] for i in range(size)]
     row = column = 0
-    curSize = size
-    count = 0
-    for i in range(1, size*size):
-        res[row][column] = i
-        if i <= curSize:
-            row += 1
+    cycle, steps, curStep = 1, size, 0
+    
+    for i in range(1, size*size + 1):        
+        res[row][column] = format(i, '02')
+        curStep +=1
+        #print 'pos='+str(row)+':'+str(column),'i=',i,'steps=',steps,'curStep=',curStep,'cycle=',cycle
+        
+        if cycle == 1:
+            if steps == curStep:
+                cycle, steps, curStep = 2, steps - 1, 0                
+            else:
+                column += 1            
+            
+        if cycle == 2:
+            if steps == curStep:
+                cycle, curStep = 3, 0
+            else:
+                row += 1
+                
+        if cycle == 3:
+            if steps == curStep:
+                cycle, steps, curStep = 4, steps - 1, 0
+            else:
+                column -= 1
+                            
+        if cycle == 4:
+            if steps == curStep:
+                cycle, curStep, column = 1, 0, column + 1
+            else:
+                row -= 1
+                
+    return res
+    
+size = 3
+for row in spiral_square(size):
+    print row
