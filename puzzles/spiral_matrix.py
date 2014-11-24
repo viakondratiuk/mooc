@@ -68,8 +68,7 @@ def spiral_square(size):
             if steps == curStep:
                 cycle, curStep, column = 1, 0, column + 1
             else:
-                row -= 1
-                
+                row -= 1                
     return res
     
 size = 3
