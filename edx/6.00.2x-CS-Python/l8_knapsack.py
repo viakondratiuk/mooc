@@ -19,7 +19,7 @@ class Item(object):
                  
 def buildItems():
     # name, value, weight
-    items = (
+    itemsTpl = (
         ('clock', 175, 10),
         ('painting', 90, 9),
         ('radio', 20, 4),
@@ -27,48 +27,51 @@ def buildItems():
         ('book', 10, 1),
         ('computer', 200, 20)
     )
-    itemsObjs = []
-    for i in items:
-        itemsObjs.append(Item(i[0], i[1], i[2]))
-    return itemsObjs
+    items = []
+    for item in itemsTpl:
+        items.append(Item(item[0], item[1], item[2]))
+    return items
     
 def greedy(items, maxWeight, keyFcn):
-    itemsCopy = sorted(items, key=keyFcn, reverse = True)
+    itemsCopy = sorted(items, key=keyFcn, reverse=True)
+    print itemsCopy
     res = []
     totalVal = totalWeight = 0.0
-    for i in itemsCopy:
-        if totalWeight > maxWeight: break
-        if i.getWeight() + totalWeight <= maxWeight:
-            res.append(i)
-            totalVal += i.getValue()
-            totalWeight += i.getWeight()
+    for item in itemsCopy:
+        if item.getWeight() + totalWeight <= maxWeight:
+            res.append(item)
+            totalVal += item.getValue()
+            totalWeight += item.getWeight()
     return (res, totalVal)
     
 def value(item):
     return item.getValue()
 
 def weightInverse(item):
-    return 1.0/item.getWeight()
+    return -item.getWeight()
 
 def density(item):
     return item.getValue()/item.getWeight()
 
-def testGreedy(Items, constraint, getKey):
-    taken, val = greedy(Items, constraint, getKey)
-    print ('Total value of items taken = ' + str(val))
+def testGreedy(items, constraint, getKey):
+    taken, val = greedy(items, constraint, getKey)
+    print('Total value of items taken = ' + str(val))
     for item in taken:
         print '  ', item
 
 def testGreedys(maxWeight = 20):
-    Items = buildItems()
+    items = buildItems()
     print('Items to choose from:')
-    for item in Items:
+    for item in items:
         print '  ', item
+
     print 'Use greedy by value to fill a knapsack of size', maxWeight
-    testGreedy(Items, maxWeight, value)
+    testGreedy(items, maxWeight, value)
+
     print 'Use greedy by weight to fill a knapsack of size', maxWeight
-    testGreedy(Items, maxWeight, weightInverse)
+    testGreedy(items, maxWeight, weightInverse)
+
     print 'Use greedy by density to fill a knapsack of size', maxWeight
-    testGreedy(Items, maxWeight, density)
+    testGreedy(items, maxWeight, density)
     
-        
+testGreedys()        
