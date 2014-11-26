@@ -74,4 +74,37 @@ def testGreedys(maxWeight = 20):
     print 'Use greedy by density to fill a knapsack of size', maxWeight
     testGreedy(items, maxWeight, density)
     
-testGreedys()        
+#testGreedys()
+
+def choseBestSet(items, constraint):
+    itemsCount = len(items)
+    psCount = 2 ** itemsCount
+    powerSet = []
+    
+    for i in range(psCount):
+        elem = []
+        v = bin(i)[2:].zfill(itemsCount)
+        for i in range(len(v)):
+            if v[i] == '1':
+                elem.append(items[i])
+        powerSet.append(elem)
+
+    bVal = 0.0
+    bSet = None
+    for s in powerSet:
+        sVal = 0.0
+        sWeight = 0.0
+        for item in s:
+            sVal += item.getValue()
+            sWeight += item.getWeight()
+        if sWeight <= constraint and sVal > bVal:
+            bVal = sVal
+            bSet = s
+    return (bSet, bVal)    
+            
+def testChoseBestSet():
+    items = buildItems()
+    taken, val = choseBestSet(items, 20)
+    print ('Total value of items taken = ' + str(val))
+    for item in taken:
+        print '  ', item        
