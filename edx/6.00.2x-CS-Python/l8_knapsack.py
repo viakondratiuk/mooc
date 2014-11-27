@@ -32,6 +32,8 @@ def buildItems():
         items.append(Item(item[0], item[1], item[2]))
     return items
     
+
+# Start greedy algorithms to build knapsack
 def greedy(items, maxWeight, keyFcn):
     itemsCopy = sorted(items, key=keyFcn, reverse=True)
     print itemsCopy
@@ -73,22 +75,10 @@ def testGreedys(maxWeight = 20):
 
     print 'Use greedy by density to fill a knapsack of size', maxWeight
     testGreedy(items, maxWeight, density)
-    
-#testGreedys()
+# End greedy algorithms to build knapsack    
 
-def choseBestSet(items, constraint):
-    itemsCount = len(items)
-    psCount = 2 ** itemsCount
-    powerSet = []
-    
-    for i in range(psCount):
-        elem = []
-        v = bin(i)[2:].zfill(itemsCount)
-        for i in range(len(v)):
-            if v[i] == '1':
-                elem.append(items[i])
-        powerSet.append(elem)
-
+# Start power set algorith to build knapsack
+def choseBestSet(powerSet, constraint):
     bVal = 0.0
     bSet = None
     for s in powerSet:
@@ -100,15 +90,69 @@ def choseBestSet(items, constraint):
         if sWeight <= constraint and sVal > bVal:
             bVal = sVal
             bSet = s
-    return (bSet, bVal)    
-            
+    return (bSet, bVal)
+    
+def genPowerSet01(items):
+    powerSet = []
+    itemsCount = len(items)
+    psCount = 2 ** itemsCount
+
+    for i in range(psCount):
+        elem = []
+        v = bin(i)[2:].zfill(itemsCount)
+        for i in range(len(v)):
+            if v[i] == '1':
+                elem.append(items[i])
+        powerSet.append(elem)
+        
+    return powerSet
+    
+def genPowerSetIterTools(items):
+    from itertools import chain, combinations
+    powerSet = []
+    for i in chain.from_iterable(combinations(items, r) for r in range(len(items)+1)):
+        powerSet.append(i)
+    return powerSet
+    
+def genPowerSetSmart(items):
+    powerSet = []
+    N = len(items)
+    for i in xrange(2 ** N):
+        combo = []
+        for j in xrange(N):
+            if (i >> j) % 2 == 1:
+                combo.append(items[j])
+        powerSet.append(combo)
+
+    return powerSet
+    
+def genPowerSetRecursion(items):
+    if not items:
+        return [[]]
+    return genPowerSetRecursion(items[1:]) + [[items[0]] + x for x in genPowerSetRecursion(items[1:])]
+
+def printPowerSet(powerSet):
+    for items in powerSet:
+        for i in items:
+            print i.getName(),
+        print
+        print '---'     
+    
 def testChoseBestSet():
     items = buildItems()
-    taken, val = choseBestSet(items, 20)
+    #powerSet = genPowerSet01(items)
+    #powerSet = genPowerSetIterTools(items)
+    #powerSet = genPowerSetSmart(items)
+    powerSet = genPowerSetRecursion(items)
+    #printPowerSet(powerSet)
+    taken, val = choseBestSet(powerSet, 20)
     print ('Total value of items taken = ' + str(val))
     for item in taken:
         print '  ', item
-        
+
+testChoseBestSet()
+# End power set algorith to build knapsack
+                        
 def yieldAllCombos(items):
     """
     Generates all combinations of N items into two bags, whereby each item is in one or zero bags.
@@ -124,7 +168,4 @@ def yieldAllCombos(items):
                 bag1.append(items[j])
             elif (i / 3**j) % 3 == 2:
                 bag2.append(items[j])
-        yield (bag1, bag2)
-        
-for i in yieldAllCombos(items='ABC'):
-    print i                        
+        yield (bag1, bag2)                     
