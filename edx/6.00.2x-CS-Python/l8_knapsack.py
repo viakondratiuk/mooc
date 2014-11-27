@@ -130,6 +130,9 @@ def genPowerSetRecursion(items):
     if not items:
         return [[]]
     return genPowerSetRecursion(items[1:]) + [[items[0]] + x for x in genPowerSetRecursion(items[1:])]
+    
+def genPowerSetOf2Bags(items):
+    pass
 
 def printPowerSet(powerSet):
     for items in powerSet:
