@@ -73,7 +73,15 @@ def powerSetTwoBagsSmart(items):
         res.append([bag1, bag2])
     return res
     
-ps = powerSetTwoBagsSmart(['A','B','C'])
-print 'Power Set length is:', len(ps)
-for i, p in enumerate(ps):
-    print i, p
+#ps = powerSetTwoBagsSmart(['A','B','C'])
+#print 'Power Set length is:', len(ps)
+#for i, p in enumerate(ps):
+#    print i, p
+
+def psRec(l):
+    if not l:
+        return [[]]
+    return psRec(l[1:]) + [[l[0]] + i for i in psRec(l[1:])]    
+    
+
+print psRec(['A','B','C'])
