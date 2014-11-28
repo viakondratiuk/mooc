@@ -27,6 +27,17 @@ Power Set of 2 bags combination [A,B,C]:
 25.    [B], [C]
 26.    [C], [A]
 27.    [C], [B]
+
+not A
+1. [], []
+2. [B], []
+3. [C], []
+4. [], [B]
+5. [], [C]
+6. [B,C], []
+7. [], [BC]
+8. [C], [B]
+9. [B], [C]
 '''
 
 def powerSetTwoBags(items):
@@ -47,26 +58,22 @@ def powerSetTwoBags(items):
     return res
     
 def powerSetTwoBagsSmart(items):
-    """
-    Generates all combinations of N items into two bags, whereby each item is in one or zero bags.
-    Yields a tuple, (bag1, bag2), where each bag is represented as a list of which item(s) are in each bag.
-    """
     N = len(items)
     res = []
     for i in xrange(3**N):
         bag1 = []
         bag2 = []
         for j in xrange(N):
-            if (i / 3**j) % 3 == 1:
-                print 'bag1:', i 
+            print '(i / 3**j)=','('+str(i)+'/ 3**'+str(j)+') % 3=',(i / 3**j) % 3
+            if (i / 3**j) % 3 == 1 and j in (0,1):                
                 bag1.append(items[j])
-            elif (i / 3**j) % 3 == 2:
-                print 'bag2:', i                 
+            elif (i / 3**j) % 3 == 2 and j in (0,1):
                 bag2.append(items[j])
+        print '-------------'
         res.append([bag1, bag2])
     return res
     
 ps = powerSetTwoBagsSmart(['A','B','C'])
 print 'Power Set length is:', len(ps)
-for p in ps:
-    print p
+for i, p in enumerate(ps):
+    print i, p
