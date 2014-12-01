@@ -153,7 +153,7 @@ def testChoseBestSet():
     for item in taken:
         print '  ', item
 
-testChoseBestSet()
+#testChoseBestSet()
 # End power set algorith to build knapsack
                         
 def yieldAllCombos(items):
@@ -171,4 +171,16 @@ def yieldAllCombos(items):
                 bag1.append(items[j])
             elif (i / 3**j) % 3 == 2:
                 bag2.append(items[j])
-        yield (bag1, bag2)                     
+        yield (bag1, bag2)
+# To generate all combinations for 2 bags you can use ternary system
+# where each digit will have unique place        
+def dec2ter(num):
+    r = ''
+    while num > 0:
+        dgt = num % 3
+        r = str(dgt) + r
+        num /= 3
+    return r.zfill(3)
+        
+for i in xrange(27):
+    print dec2ter(i)                
