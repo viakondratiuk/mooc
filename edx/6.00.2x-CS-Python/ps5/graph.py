@@ -105,6 +105,7 @@ class WeightedDigraph(Digraph):
                 res = '{0}{1} -> {2} ({3}, {4})\n'.format(res, k, d[0], float(d[1][0]), float(d[1][1]))
         return res[:-1]    
         
+'''
 nx = Node('x')
 ny = Node('y')
 nz = Node('z')
@@ -120,8 +121,6 @@ g.addEdge(e2)
 g.addEdge(e3)
 print g
         
-                        
-'''
 g = WeightedDigraph()
 na = Node('a')
 nb = Node('b')
