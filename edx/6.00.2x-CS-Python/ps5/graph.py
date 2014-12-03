@@ -32,6 +32,21 @@ class Edge(object):
         return self.dest
     def __str__(self):
         return '{0}->{1}'.format(self.src, self.dest)
+        
+class WeightedEdge(Edge):
+    def __init__(self, src, dest, totalDist, outDist):
+        Edge.__init__(self, src, dest)
+        self.totalDist = totalDist
+        self.outDist = outDist
+        
+    def getTotalDistance(self):
+        return self.totalDist
+        
+    def getOutdoorDistance(self):
+        return self.outDist
+        
+    def __str__(self):
+        return Edge.__str__(self) + ' ({0}, {1})'.format(self.totalDist, self.outDist)
 
 class Digraph(object):
     """
@@ -68,3 +83,70 @@ class Digraph(object):
             for d in self.edges[str(k)]:
                 res = '{0}{1}->{2}\n'.format(res, k, d)
         return res[:-1]
+        
+class WeightedDigraph(Digraph):
+    def addEdge(self, edge):
+        src = edge.getSource()
+        dest = edge.getDestination()
+        if not(src in self.nodes and dest in self.nodes):
+            raise ValueError('Node not in graph')
+        self.edges[src].append([dest, (edge.getTotalDistance(), edge.getOutdoorDistance())])
+
+    def childrenOf(self, node):
+        children = []
+        for child in self.edges[node]:
+            children.append(child[0])
+        return children   
+        
+    def __str__(self):
+        res = ''
+        for k in self.edges:
+            for d in self.edges[k]:
+                res = '{0}{1} -> {2} ({3}, {4})\n'.format(res, k, d[0], float(d[1][0]), float(d[1][1]))
+        return res[:-1]    
+        
+nx = Node('x')
+ny = Node('y')
+nz = Node('z')
+e1 = WeightedEdge(nx, ny, 18, 8)
+e2 = WeightedEdge(ny, nz, 20, 1)
+e3 = WeightedEdge(nz, nx, 7, 6)
+g = WeightedDigraph()
+g.addNode(nx)
+g.addNode(ny)
+g.addNode(nz)
+g.addEdge(e1)
+g.addEdge(e2)
+g.addEdge(e3)
+print g
+        
+                        
+'''
+g = WeightedDigraph()
+na = Node('a')
+nb = Node('b')
+nc = Node('c')
+g.addNode(na)
+g.addNode(nb)
+g.addNode(nc)
+e1 = WeightedEdge(na, nb, 15, 10)
+print e1
+#a->b (15, 10)
+print e1.getTotalDistance()
+#15
+print e1.getOutdoorDistance()
+#10
+e2 = WeightedEdge(na, nc, 14, 6)
+e3 = WeightedEdge(nb, nc, 3, 1)
+print e2
+#a->c (14, 6)
+print e3
+#b->c (3, 1)
+g.addEdge(e1)
+g.addEdge(e2)
+g.addEdge(e3)
+print g
+#a->b (15.0, 10.0)
+#a->c (14.0, 6.0)
+#b->c (3.0, 1.0)
+'''
