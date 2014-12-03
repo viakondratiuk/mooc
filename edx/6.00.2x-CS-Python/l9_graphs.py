@@ -92,14 +92,10 @@ def testSP():
     return (g, nodes)
     
 def printPath(path):
-    # a path is a list of nodes
-    result = ''
-    for i in range(len(path)):
-        if i == len(path) - 1:
-            result = result + str(path[i])
-        else:
-            result = result + str(path[i]) + '->'
-    return result    
+    res = ''
+    for node in path:
+        res += node.getName() + '->'
+    return res[:-2]
     
 def DFS(graph, start, end, path = []):
     path = path + [start]
@@ -111,7 +107,7 @@ def DFS(graph, start, end, path = []):
             if newPath != None:
                 return newPath
     return None
-    
+
 g, nodes = testSP()
 sp = DFS(g, nodes[0], nodes[5])
 print 'Shortest path found by DFS:', printPath(sp)
