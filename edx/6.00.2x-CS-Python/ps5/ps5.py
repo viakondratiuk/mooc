@@ -60,9 +60,7 @@ def load_map(mapFilename):
             pass            
         
     return g    
-        
-mitMap = load_map("mit_map.txt")
-print mitMap.edges
+
 #
 # Problem 3: Finding the Shortest Path using Brute Force Search
 #
