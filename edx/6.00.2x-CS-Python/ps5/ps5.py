@@ -88,14 +88,14 @@ def getPaths(digraph, start, end):
     return paths
 
 def calcDistance(digraph, path):
-    totalDist = outDist = 0
+    totalDist = outDist = 0.0
     node = path[0]
     for i in xrange(1, len(path) - 1):
         edges = digraph.edges[node]
         for edge in edges:
             if edge[0] == path[i]:
-                totalDist += edge[1][0]
-                outDist += edge[1][1]
+                totalDist += float(edge[1][0])
+                outDist += float(edge[1][1])
                 break
                 
     return (totalDist, outDist)   
@@ -125,14 +125,17 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
         If there exists no path that satisfies maxTotalDist and
         maxDistOutdoors constraints, then raises a ValueError.
     """
-    res = []
+    res = ''
+    shortest = (None, None)
     paths = getPaths(digraph, start, end)
     for path in paths:
         totalDist, outDist = calcDistance(digraph, path)
         if totalDist <= maxTotalDist and outDist <= maxDistOutdoors:
-            res.append(path)
-    # TODO: Find shortest path    
-    return res
+            if not(shortest[0] > totalDist and shortest[1] > outDist):
+                res = path
+                shortest = (totalDist, outDist)
+    if not r: raise ValueError('Problems')        
+    return map(str, res)
 #
 # Problem 4: Finding the Shorest Path using Optimized Search Method
 #
@@ -176,7 +179,6 @@ if __name__ == '__main__':
 
 
     LARGE_DIST = 1000000
-    '''
     n1 = Node('1')
     n2 = Node('2')
     n3 = Node('3')
@@ -185,43 +187,32 @@ if __name__ == '__main__':
     n6 = Node('6')
     n7 = Node('7')
     n8 = Node('8')                    
-    e1 = WeightedEdge(n1, n2, 1, 1)
-    e2 = WeightedEdge(n2, n3, 1, 1)
+    e1 = WeightedEdge(n1, n2, 10.0, 5.0)
+    e2 = WeightedEdge(n2, n3, 8.0, 5.0)
     e3 = WeightedEdge(n2, n4, 1, 1)
     e4 = WeightedEdge(n1, n5, 1, 1)
     e5 = WeightedEdge(n5, n6, 1, 1)
     e6 = WeightedEdge(n5, n7, 1, 1)
     e7 = WeightedEdge(n7, n1, 1, 1)
-    e8 = WeightedEdge(n7, n8, 1, 1)
-    
+    e8 = WeightedEdge(n7, n8, 1, 1)    
     e9 = WeightedEdge(n5, n8, 1, 1)
     
-    g = WeightedDigraph()
-    g.addNode(n1)
-    g.addNode(n2)
-    g.addNode(n3)
-    g.addNode(n4)
-    g.addNode(n5)
-    g.addNode(n6)
-    g.addNode(n7)
-    g.addNode(n8)
-    g.addEdge(e1)
-    g.addEdge(e2)
-    g.addEdge(e3)
-    g.addEdge(e4)
-    g.addEdge(e5)
-    g.addEdge(e6)
-    g.addEdge(e7)
-    g.addEdge(e8)
-    g.addEdge(e9)
-    print g
-    '''
+    m1 = WeightedDigraph()
+    m1.addNode(n1)
+    m1.addNode(n2)
+    m1.addNode(n3)
+    m1.addEdge(e1)
+    m1.addEdge(e2)
+    print m1
+    brutePath1 = bruteForceSearch(m1, '1', '3', 100, 100)  
+    print brutePath1  
+    
 #     Test case 1
-    print "---------------"
-    print "Test case 1:"
-    print "Find the shortest-path from Building 32 to 56"
-    expectedPath1 = ['32', '56']
-    brutePath1 = bruteForceSearch(mitMap, '32', '56', LARGE_DIST, LARGE_DIST)
+#    print "---------------"
+#    print "Test case 1:"
+#    print "Find the shortest-path from Building 32 to 56"
+#    expectedPath1 = ['32', '56']
+#    brutePath1 = bruteForceSearch(mitMap, '32', '56', LARGE_DIST, LARGE_DIST)
 #     dfsPath1 = directedDFS(mitMap, '32', '56', LARGE_DIST, LARGE_DIST)
 #    print "Expected: ", expectedPath1
 #    print "Brute-force: ", brutePath1
