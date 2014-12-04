@@ -130,7 +130,8 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
     for path in paths:
         totalDist, outDist = calcDistance(digraph, path)
         if totalDist <= maxTotalDist and outDist <= maxDistOutdoors:
-            res.append(path)     
+            res.append(path)
+    # TODO: Find shortest path    
     return res
 #
 # Problem 4: Finding the Shorest Path using Optimized Search Method
