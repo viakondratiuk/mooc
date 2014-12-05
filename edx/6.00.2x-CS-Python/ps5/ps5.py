@@ -136,6 +136,28 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
 #
 # Problem 4: Finding the Shorest Path using Optimized Search Method
 #
+def getOptimizedPath(digraph, start, end, maxTotalDist, maxDistOutdoors):
+    nS, nE = Node(start), Node(end)
+    stack = [[nS, n] for n in digraph.childrenOf(nS) if n != nS]
+    res = ''
+    shortest = None    
+    while stack:
+        path = stack.pop()        
+        totalDist, outDist = calcDistance(digraph, path)
+        if totalDist > maxTotalDist or outDist > maxDistOutdoors:
+            continue        
+        node = path[-1]
+        if node == nE:
+            if not shortest or totalDist < shortest:
+                res, shortest = path, totalDist
+            continue            
+        children = digraph.childrenOf(node)
+        if not children: continue        
+        for child in children:
+            if child not in path:
+                stack.append(path + [child])
+    return res
+    
 def directedDFS(digraph, start, end, maxTotalDist, maxDistOutdoors):
     """
     Finds the shortest path from start to end using directed depth-first.
@@ -161,8 +183,9 @@ def directedDFS(digraph, start, end, maxTotalDist, maxDistOutdoors):
         If there exists no path that satisfies maxTotalDist and
         maxDistOutdoors constraints, then raises a ValueError.
     """
-    #TODO
-    pass
+    res = getOptimizedPath(digraph, start, end, maxTotalDist, maxDistOutdoors)
+    if not res: raise ValueError('Problems')        
+    return map(str, res)    
 
 # Uncomment below when ready to test
 #### NOTE! These tests may take a few minutes to run!! ####
@@ -204,8 +227,8 @@ if __name__ == '__main__':
     m1.addEdge(e3)
     m1.addEdge(e4)    
     print m1
-    brutePath1 = bruteForceSearch(m1, '1', '3', 18, 18)  
-    print brutePath1  
+    #print bruteForceSearch(m1, '1', '3', 18, 18)
+    print directedDFS(m1, '1', '3', 18, 18)  
     
 #     Test case 1
 #    print "---------------"

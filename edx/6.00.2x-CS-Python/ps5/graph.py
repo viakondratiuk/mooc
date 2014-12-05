@@ -31,22 +31,7 @@ class Edge(object):
     def getDestination(self):
         return self.dest
     def __str__(self):
-        return '{0}->{1}'.format(self.src, self.dest)
-        
-class WeightedEdge(Edge):
-    def __init__(self, src, dest, totalDist, outDist):
-        Edge.__init__(self, src, dest)
-        self.totalDist = totalDist
-        self.outDist = outDist
-        
-    def getTotalDistance(self):
-        return self.totalDist
-        
-    def getOutdoorDistance(self):
-        return self.outDist
-        
-    def __str__(self):
-        return Edge.__str__(self) + ' ({0}, {1})'.format(self.totalDist, self.outDist)
+        return '{0}->{1}'.format(self.src, self.dest)        
 
 class Digraph(object):
     """
@@ -83,7 +68,22 @@ class Digraph(object):
             for d in self.edges[str(k)]:
                 res = '{0}{1}->{2}\n'.format(res, k, d)
         return res[:-1]
+
+class WeightedEdge(Edge):
+    def __init__(self, src, dest, totalDist, outDist):
+        Edge.__init__(self, src, dest)
+        self.totalDist = totalDist
+        self.outDist = outDist
         
+    def getTotalDistance(self):
+        return self.totalDist
+        
+    def getOutdoorDistance(self):
+        return self.outDist
+        
+    def __str__(self):
+        return Edge.__str__(self) + ' ({0}, {1})'.format(self.totalDist, self.outDist)        
+                        
 class WeightedDigraph(Digraph):
     def addEdge(self, edge):
         src = edge.getSource()
