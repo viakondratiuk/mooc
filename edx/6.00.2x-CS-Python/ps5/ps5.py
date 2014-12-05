@@ -69,8 +69,6 @@ def load_map(mapFilename):
 #
 def getPaths(digraph, start, end):
     nS, nE = Node(start), Node(end)
-    if not (digraph.hasNode(nS) or digraph.hasNode(nE)):
-        return None
     stack = [[nS, n] for n in digraph.childrenOf(nS) if n != nS]
     paths = []    
     while stack:
@@ -83,22 +81,22 @@ def getPaths(digraph, start, end):
         if not children: continue        
         for child in children:
             if child not in path:
-                l = path + [child]
-                stack.append(l)
+                stack.append(path + [child])
     return paths
 
 def calcDistance(digraph, path):
     totalDist = outDist = 0.0
-    node = path[0]
-    for i in xrange(1, len(path) - 1):
+    node = path[0]    
+    for i in xrange(1, len(path)):
         edges = digraph.edges[node]
         for edge in edges:
             if edge[0] == path[i]:
                 totalDist += float(edge[1][0])
                 outDist += float(edge[1][1])
                 break
-                
-    return (totalDist, outDist)   
+        node = path[i]
+
+    return (totalDist, outDist)
 
         
 def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
@@ -126,15 +124,14 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
         maxDistOutdoors constraints, then raises a ValueError.
     """
     res = ''
-    shortest = (None, None)
+    shortest = None
     paths = getPaths(digraph, start, end)
     for path in paths:
-        totalDist, outDist = calcDistance(digraph, path)
+        totalDist, outDist = calcDistance(digraph, path)        
         if totalDist <= maxTotalDist and outDist <= maxDistOutdoors:
-            if not(shortest[0] > totalDist and shortest[1] > outDist):
-                res = path
-                shortest = (totalDist, outDist)
-    if not r: raise ValueError('Problems')        
+            if not shortest or totalDist < shortest:
+                res, shortest = path, totalDist
+    if not res: raise ValueError('Problems')        
     return map(str, res)
 #
 # Problem 4: Finding the Shorest Path using Optimized Search Method
@@ -171,7 +168,7 @@ def directedDFS(digraph, start, end, maxTotalDist, maxDistOutdoors):
 #### NOTE! These tests may take a few minutes to run!! ####
 if __name__ == '__main__':
     #Test cases
-    mitMap = load_map("mit_map.txt")
+    #mitMap = load_map("mit_map.txt")
 #    print isinstance(mitMap, Digraph)
 #    print isinstance(mitMap, WeightedDigraph)
 #    print 'nodes', mitMap.nodes
@@ -188,9 +185,9 @@ if __name__ == '__main__':
     n7 = Node('7')
     n8 = Node('8')                    
     e1 = WeightedEdge(n1, n2, 10.0, 5.0)
-    e2 = WeightedEdge(n2, n3, 8.0, 5.0)
-    e3 = WeightedEdge(n2, n4, 1, 1)
-    e4 = WeightedEdge(n1, n5, 1, 1)
+    e2 = WeightedEdge(n1, n4, 5.0, 1.0)
+    e3 = WeightedEdge(n2, n3, 8.0, 5.0)
+    e4 = WeightedEdge(n4, n3, 8.0, 5.0)
     e5 = WeightedEdge(n5, n6, 1, 1)
     e6 = WeightedEdge(n5, n7, 1, 1)
     e7 = WeightedEdge(n7, n1, 1, 1)
@@ -201,10 +198,13 @@ if __name__ == '__main__':
     m1.addNode(n1)
     m1.addNode(n2)
     m1.addNode(n3)
+    m1.addNode(n4)    
     m1.addEdge(e1)
     m1.addEdge(e2)
+    m1.addEdge(e3)
+    m1.addEdge(e4)    
     print m1
-    brutePath1 = bruteForceSearch(m1, '1', '3', 100, 100)  
+    brutePath1 = bruteForceSearch(m1, '1', '3', 18, 18)  
     print brutePath1  
     
 #     Test case 1
