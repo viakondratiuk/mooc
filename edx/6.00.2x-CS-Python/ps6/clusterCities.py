@@ -46,28 +46,41 @@ class Cluster(object):
         """ Elements of a cluster are saved in self.points
         and the pointType is also saved """
         self.points = points
-        print self.points
         self.pointType = pointType
     def singleLinkageDist(self, other):
         """ Returns the float distance between the points that 
         are closest to each other, where one point is from 
         self and the other point is from other. Uses the 
         Euclidean dist between 2 points, defined in Point."""
-        print 111
+        minDist = None
+        for p1 in self.points:
+            for p2 in other.points:
+                dist = p1.distance(p2)
+                if not minDist or dist < minDist:
+                    minDist = dist
+        return minDist
     def maxLinkageDist(self, other):
         """ Returns the float distance between the points that 
         are farthest from each other, where one point is from 
         self and the other point is from other. Uses the 
         Euclidean dist between 2 points, defined in Point."""
-        # TO DO
-        pass
+        maxDist = None
+        for p1 in self.points:
+            for p2 in other.points:
+                dist = p1.distance(p2)
+                if not maxDist or dist > maxDist:
+                    maxDist = dist
+        return maxDist
     def averageLinkageDist(self, other):
         """ Returns the float average (mean) distance between all 
         pairs of points, where one point is from self and the 
         other point is from other. Uses the Euclidean dist 
         between 2 points, defined in Point."""
-        # TO DO
-        pass
+        totDist = 0.0
+        for p1 in self.points:
+            for p2 in other.points:
+                totDist += p1.distance(p2)
+        return totDist/(len(self.points)*len(other.points))
     def members(self):
         for p in self.points:
             yield p
@@ -106,7 +119,6 @@ class ClusterSet(object):
         """ Append a cluster to the end of the cluster list
         only if it doesn't already exist. If it is already in the 
         cluster set, raise a ValueError """
-        print c
         if c in self.members:
             raise ValueError
         self.members.append(c)
