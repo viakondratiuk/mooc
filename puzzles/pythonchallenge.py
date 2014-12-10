@@ -27,4 +27,10 @@ def pzl4():
         n = str(m.group(0))        
         url = 'http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing=' + n
         
-pzl4()
+def pzl5():
+    import pickle, urllib
+    url = 'http://www.pythonchallenge.com/pc/def/banner.p'
+    banner = pickle.load(urllib.urlopen(url))
+
+    
+pzl5()
