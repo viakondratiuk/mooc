@@ -31,6 +31,11 @@ def pzl5():
     import pickle, urllib
     url = 'http://www.pythonchallenge.com/pc/def/banner.p'
     banner = pickle.load(urllib.urlopen(url))
-
+    out = ''
+    for row in banner:
+        for i in row:
+            out += i[0] * i[1]
+        out += '\n'
+    print out
     
 pzl5()
