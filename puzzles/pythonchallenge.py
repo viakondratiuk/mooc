@@ -15,4 +15,16 @@ def pzl3():
             print s[i+4]
     return r
         
-print pzl3()
+def pzl4():
+    import re, urllib
+    url = 'http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing=93781'
+    n = '93781'
+    for i in xrange(100):
+        u = urllib.urlopen(url)
+        r = u.read()
+        print 'nothing:', n, 'text:', r
+        m = re.search('[0-9]+', r)
+        n = str(m.group(0))        
+        url = 'http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing=' + n
+        
+pzl4()
