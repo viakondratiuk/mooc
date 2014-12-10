@@ -38,4 +38,14 @@ def pzl5():
         out += '\n'
     print out
     
-pzl5()
+def pzl6():
+    import zipfile, re
+    z = zipfile.ZipFile('channel.zip')
+    f = '90052.txt'    
+    for i in range(len(z.namelist())):
+        #90052
+        c = z.read(f)
+        m = re.search('[0-9]+', c)
+        print z.getinfo(f).comment
+        f = str(m.group(0)) + '.txt'
+pzl6()
