@@ -1,3 +1,6 @@
+'''
+Testing module
+'''
 __all__ = ['a1', 'a2', '_a4']
 
 def a1():
