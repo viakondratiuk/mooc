@@ -6,7 +6,7 @@ class Person(AttrDisplay):
         self.job = job
         self.pay = pay
     def lastName(self):
-        return self.name.split()[-1]
+        return 'l:', self.name.split()[-1]
     def giveRaise(self, percent):
         self.pay = int(self.pay * (1 + percent))
         
