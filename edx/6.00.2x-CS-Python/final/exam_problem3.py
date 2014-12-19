@@ -2,9 +2,9 @@ import random
 import pylab
 
 # Global Variables
-MAXRABBITPOP = 100
-CURRENTRABBITPOP = 10
-CURRENTFOXPOP = 20
+MAXRABBITPOP = 1000
+CURRENTRABBITPOP = 500
+CURRENTFOXPOP = 30
 
 def rabbitGrowth():
     """ 
@@ -53,7 +53,7 @@ def foxGrowth():
             if random.random() < 1/float(3):
                 CURRENTFOXPOP += 1
         else:
-            if CURRENTFOXPOP > 10 and random.random() < 1/float(10):
+            if CURRENTFOXPOP > 10 and random.random() < 9/float(10):
                 CURRENTFOXPOP -= 1
             
 def runSimulation(numSteps):
@@ -76,4 +76,20 @@ def runSimulation(numSteps):
         fPop.append(CURRENTFOXPOP)        
     return (rPop, fPop)
     
-print runSimulation(100)
+res = runSimulation(200)
+pylab.figure(1)
+pylab.plot(res[0], label='Rabbit population')
+pylab.plot(res[1], label='Fox population')
+pylab.title('Rabbit-Fox growth')
+pylab.xlabel('Time steps')
+pylab.ylabel('Population count')
+pylab.legend(('Rabbit', 'Fox'))
+
+pylab.figure(2)
+rCoeff = pylab.polyfit(range(len(res[0])), res[0], 2)
+pylab.plot(pylab.polyval(rCoeff, range(len(res[0]))))
+fCoeff = pylab.polyfit(range(len(res[1])), res[1], 2)
+pylab.plot(pylab.polyval(fCoeff, range(len(res[1]))))
+pylab.legend(('Rabbit', 'Fox'))
+
+pylab.show()
