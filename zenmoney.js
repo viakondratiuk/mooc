@@ -1,3 +1,20 @@
+// ==UserScript==
+// @name         Zenmoney totals
+// @version      0.1
+// @description  Calculate totals for zenmoney bills
+// @include      https://zenmoney.ru/a/*
+// @require      http://code.jquery.com/jquery-latest.js
+// @require      https://gist.github.com/raw/2625891/waitForKeyElements.js
+// @grant        GM_addStyle
+// ==/UserScript==
+/* 
+  The @grant directive is needed to work around a design change
+  introduced in GM 1.0.   It restores the sandbox.
+*/
+// Currency rates https://privatbank.ua/ua/
+usdRate = 18.00;
+euroRate = 22.00;
+
 waitForKeyElements(('#FilterBlock ul.accountFilter'), accountsLoaded);
 
 function accountsLoaded(jNode) {
@@ -47,4 +64,4 @@ function calcBalanceHrv(jNode) {
     });
     
     return allHrv.toFixed(2).split('.');
-}    
+}
